@@ -54,8 +54,3 @@ analogWrite(9, 180);   // Set LED brightness
 
 ---
 
-### Summary
-
-* **`analogRead()`** → Reads analog sensor values (0–1023).
-* **`analogWrite()`** → Generates a PWM signal (0–255) to control devices like LEDs and motors.
-* **PWM** is used to control **brightness, motor speed, and power** by varying the duty cycle of a digital signal.
