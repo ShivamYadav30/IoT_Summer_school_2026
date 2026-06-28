@@ -1,0 +1,97 @@
+const int led = 6;
+const int button = 2;
+
+int mode = 1;
+bool lastButton = HIGH;
+
+void setup() {
+  pinMode(led, OUTPUT);
+ 
+
+  Serial.begin(9600);
+  Serial.println("Mode 1: Slow Breathing");
+}
+
+void loop() {
+
+ 
+  bool currentButton = digitalRead(button);
+
+  if (lastButton == HIGH && currentButton == LOW) {
+    mode++;
+
+    if (mode > 3)
+      mode = 1;
+
+    if (mode == 1)
+      Serial.println("Mode 1: Slow Breathing");
+    else if (mode == 2)
+      Serial.println("Mode 2: Fast Pulse");
+    else
+      Serial.println("Mode 3: SOS");
+
+    delay(200); 
+  }
+
+  lastButton = currentButton;
+
+  if (mode == 1)
+    breathing(15);
+
+  else if (mode == 2)
+    breathing(2);
+
+  else
+    sosPattern();
+}
+
+// Breathing LED
+void breathing(int d) {
+
+  for (int i = 0; i <= 255; i++) {
+    analogWrite(led, i);
+    delay(d);
+
+    if (digitalRead(button) == LOW)
+      return;
+  }
+
+  for (int i = 255; i >= 0; i--) {
+    analogWrite(led, i);
+    delay(d);
+
+    if (digitalRead(button) == LOW)
+      return;
+  }
+}
+
+// SOS Pattern (... --- ...)
+void sosPattern() {
+
+  // S (...)
+  for (int i = 0; i < 3; i++) {
+    blink(200);
+    if (digitalRead(button) == LOW) return;
+  }
+
+  // O (---)
+  for (int i = 0; i < 3; i++) {
+    blink(600);
+    if (digitalRead(button) == LOW) return;
+  }
+
+  // S (...)
+  for (int i = 0; i < 3; i++) {
+    blink(200);
+    if (digitalRead(button) == LOW) return;
+  }
+
+  delay(1000);
+}
+
+void blink(int t) {
+  digitalWrite(led, HIGH);
+  delay(t);
+  digitalWrite(led, LOW);
+  delay(200);
+}
