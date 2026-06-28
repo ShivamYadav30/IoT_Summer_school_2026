@@ -3,14 +3,12 @@
 * `setup()` runs **only once** when the Arduino is powered on or reset.
 * It is used to initialize hardware and settings.
 
-**Example:**
-
-```cpp
+Example:
 void setup() {
   pinMode(13, OUTPUT);    
   Serial.begin(9600);      
 }
-```
+
 
 ---
 
@@ -21,14 +19,13 @@ void setup() {
 
 **Example:**
 
-```cpp
+
 void loop() {
   digitalWrite(13, HIGH);
   delay(1000);
   digitalWrite(13, LOW);
   delay(1000);
 }
-```
 
 ---
 
@@ -38,12 +35,12 @@ A long `delay()` **blocks** the Arduino from doing anything else during that tim
 
 **Example:**
 
-```cpp
+
 void loop() {
   delay(5000);   // Wait 5 seconds
   Serial.println("Reading Sensor");
 }
-```
+
 
 During the 5-second delay:
 
@@ -71,7 +68,6 @@ Use the `millis()` function instead of `delay()`.
 
 **Example:**
 
-```cpp
 unsigned long previousTime = 0;
 const long interval = 1000;
 
@@ -89,4 +85,4 @@ void loop() {
 
   // Other tasks run continuously
 }
-```
+
