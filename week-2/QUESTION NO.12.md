@@ -1,4 +1,4 @@
-#Q-12. MICROCONTROLLER vs MICROPROCESSOR
+Q-12. MICROCONTROLLER vs MICROPROCESSOR
 
 | **Parameter**         | **Microcontroller (Arduino UNO)**                                     | **Microprocessor (Raspberry Pi)**                                      |
 | --------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------- |
