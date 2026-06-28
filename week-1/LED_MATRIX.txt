@@ -1,0 +1,31 @@
+int LED_ROW[] = {11,10,9,8};
+int LED_COL[] = {2,3,4,5};
+
+void setup()
+{
+    for(int i=0;i<4;i++)
+    {
+        pinMode(LED_ROW[i],OUTPUT);
+        pinMode(LED_COL[i],OUTPUT);
+
+        
+}
+
+void loop()
+{
+    for(int i=0;i<4;i++)
+    {
+        digitalWrite(LED_ROW[i],HIGH);
+
+        for(int j=0;j<4;j++)
+        {
+            digitalWrite(LED_COL[j],LOW);
+
+            delay(500);
+
+            digitalWrite(LED_COL[j],HIGH);
+        }
+
+        digitalWrite(LED_ROW[i],LOW);
+    }
+}
