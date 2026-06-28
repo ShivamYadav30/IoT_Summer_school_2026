@@ -1,0 +1,87 @@
+int btnDo = 2;
+ int btnRe = 3;
+ int btnMi = 4;
+int btnFa = 5; 
+int modeBtn = 8;
+
+
+const int buzzer = 10;
+int majorScale[] = {262, 294, 330, 349};
+
+
+int minorScale[] = {250,280,305,335};
+
+
+bool majorMode = true;
+bool lastModeState = LOW;
+
+void setup() {
+
+  pinMode(btnDo, INPUT);
+  pinMode(btnRe, INPUT);
+  pinMode(btnMi, INPUT);
+  pinMode(btnFa, INPUT);
+  pinMode(modeBtn, INPUT);
+
+  pinMode(buzzer, OUTPUT);
+
+  Serial.begin(9600);
+  Serial.println("4-Key Musical Instrument");
+}
+
+void loop() {
+
+ 
+  bool currentModeState = digitalRead(modeBtn);
+
+  if (currentModeState == HIGH && lastModeState == LOW) {
+
+    majorMode = !majorMode;
+
+    if (majorMode)
+      Serial.println("Mode: MAJOR");
+    else
+      Serial.println("Mode: MINOR");
+
+    delay(200);   
+  }
+
+  lastModeState = currentModeState;
+
+  
+  bool doPressed = digitalRead(btnDo);
+  bool rePressed = digitalRead(btnRe);
+  bool miPressed = digitalRead(btnMi);
+  bool faPressed = digitalRead(btnFa);
+
+  int count = doPressed + rePressed + miPressed + faPressed;
+
+ 
+  if (count >= 2) {
+    tone(buzzer, 392);   
+    return;
+  }
+
+  int *scale;
+
+  if (majorMode)
+    scale = majorScale;
+  else
+    scale = minorScale;
+
+ 
+  if (doPressed)
+    tone(buzzer, scale[0]);
+
+  else if (rePressed)
+    tone(buzzer, scale[1]);
+
+  else if (miPressed)
+    tone(buzzer, scale[2]);
+
+  else if (faPressed)
+    tone(buzzer, scale[3]);
+
+  else
+    noTone(buzzer);
+}
