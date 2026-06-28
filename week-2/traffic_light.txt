@@ -1,0 +1,61 @@
+int GREEN = 11;
+int YELLOW = 12;
+int RED = 13;
+
+int SWITCH = 7;
+
+void setup(){
+    pinMode(GREEN, OUTPUT);
+    pinMode(RED, OUTPUT);
+    pinMode(YELLOW,OUTPUT);
+    pinMode(SWITCH, INPUT);
+    Serial.begin(9600);
+}
+void state_of_light(bool red_state,bool yellow_state, bool green_state)          
+{    digitalWrite(RED, red_state);
+     digitalWrite(YELLOW,yellow_state);
+     digitalWrite(GREEN,green_state);
+}
+ 
+void printState(String state) {
+  Serial.print("Time: ");
+  Serial.print(millis());
+  Serial.print(" ms --> ");
+  Serial.println(state);
+}
+void waitWithButton(unsigned long duration) {
+  unsigned long startTime = millis();
+
+  while (millis() - startTime < duration) {
+
+    
+    if (digitalRead(SWITCH) == LOW) {
+
+    state_of_light(HIGH, LOW, LOW);
+      printState("PEDESTRIAN - RED");
+
+      delay(8000);  
+          }
+
+    delay(1000); 
+  }
+}
+
+void loop() {
+
+  state_of_light(HIGH, LOW, LOW);
+  printState("RED");
+ delay(5000);
+ 
+  
+
+  state_of_light(LOW, HIGH, LOW);
+  printState("YELLOW");
+  delay(2000);
+  waitWithButton(2000);
+
+  state_of_light(LOW, LOW, HIGH);
+  printState("GREEN");
+ delay(4000);
+  waitWithButton(4000);
+}
