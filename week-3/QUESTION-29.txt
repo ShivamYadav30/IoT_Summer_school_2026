@@ -1,0 +1,68 @@
+QUESTION-29: What is sensor calibration and why is it important in IoT systems? How would you calibrate an analog soil moisture sensor to give accurate percentage readings? Describe the two-point calibration method.
+
+Sensor Calibration
+
+Sensor calibration is the process of comparing a sensor’s output with a
+known reference value and adjusting its readings so that the measured
+value is as accurate as possible.
+
+Why is Calibration Important in IoT Systems?
+
+Calibration is important because it: - Improves measurement accuracy. -
+Reduces sensor errors caused by manufacturing differences. - Ensures
+reliable data for IoT decision-making. - Increases consistency between
+multiple sensors. - Prevents incorrect automation (e.g., wrong
+irrigation decisions).
+
+Calibration of an Analog Soil Moisture Sensor
+
+An analog soil moisture sensor outputs an analog value (typically 0–1023
+on an Arduino UNO). Since different sensors and soil types produce
+different readings, calibration is required.
+
+Two-Point Calibration Method
+
+The two-point calibration method uses two known reference conditions.
+
+1. Dry Soil Reading (0% Moisture)
+
+-   Keep the sensor completely dry (or in air).
+-   Record the analog value. Example: Dry Reading = 850
+
+2. Wet Soil Reading (100% Moisture)
+
+-   Insert the sensor into fully saturated soil or water.
+-   Record the analog value. Example: Wet Reading = 350
+
+These two values become the calibration limits.
+
+Convert Analog Reading to Moisture Percentage
+
+Use Arduino’s map() function:
+
+int moisturePercent = map(sensorValue, 850, 350, 0, 100);
+moisturePercent = constrain(moisturePercent, 0, 100);
+
+Example
+
+Sensor Value Moisture (%) 850 0% (Dry) 600 50% 350 100% (Wet)
+
+Calibration Steps
+
+1.  Connect the soil moisture sensor to the Arduino.
+2.  Measure and record the dry sensor value.
+3.  Measure and record the wet sensor value.
+4.  Replace these values in the map() function.
+5.  Test the sensor with different soil moisture levels.
+6.  Fine-tune the calibration values if needed.
+
+Advantages of Two-Point Calibration
+
+-   Simple and easy to perform.
+-   Improves measurement accuracy.
+-   Compensates for sensor-to-sensor variation.
+-   Provides moisture readings directly in percentage (0–100%), making
+    them easy to use in IoT applications such as automatic irrigation
+    systems.
+
+
