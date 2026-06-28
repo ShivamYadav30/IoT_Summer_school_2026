@@ -1,0 +1,18 @@
+
+Q-10:What is a .gitignore file? Write a .gitignore for an Arduino project that excludes compiled output files (.hex, .elf), OS-specific files (.DS_Store, Thumbs.db), and IDE config folders (.vscode/, build/). 
+
+
+.gitignore file tells Git which files and folders should not be tracked or committed to the repository & should be ignored.
+
+Compiled output files
+*.hex
+*.elf
+
+OS-specific files
+.DS_Store
+Thumbs.db
+
+IDE and build folders
+.vscode/
+build/
+
