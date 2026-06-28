@@ -4,6 +4,7 @@
 * It is used to initialize hardware and settings.
 
 Example:
+
 void setup() {
   pinMode(13, OUTPUT);    
   Serial.begin(9600);      
