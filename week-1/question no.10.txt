@@ -5,8 +5,8 @@ Q-10:What is a .gitignore file? Write a .gitignore for an Arduino project that e
 .gitignore file tells Git which files and folders should not be tracked or committed to the repository & should be ignored.
 
 Compiled output files
-*.hex
-*.elf
+.hex
+.elf
 
 OS-specific files
 .DS_Store
