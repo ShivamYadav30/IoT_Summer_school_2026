@@ -1,0 +1,2 @@
+Q36. MQTT vs HTTP Comparison
+Create a table comparing MQTT and HTTP across: Architecture pattern, Data transfer model, Power consumption, Latency, Use case suitability for IoT, and Security considerations. Based on your analysis, which would you choose for a 1000-node smart agriculture deployment and why?

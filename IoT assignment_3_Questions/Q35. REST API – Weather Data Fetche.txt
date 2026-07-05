@@ -1,0 +1,2 @@
+Q35. REST API – Weather Data Fetcher
+Program ESP32 to fetch real weather data from OpenWeatherMap API (free tier). Display on Serial Monitor: City Name, Temperature (API value vs DHT11 local value), Humidity, Weather Description. Compare API data with your local DHT11 reading and print the difference. Store your API key in a separate config.h file (do NOT commit this file – add to .gitignore).
