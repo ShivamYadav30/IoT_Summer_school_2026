@@ -1,0 +1,2 @@
+Q38. LoRa & LPWAN – Long Range IoT
+LoRa (Long Range) is widely used for IoT in agriculture and smart cities. Write 200 words explaining: What LPWAN means, How LoRa achieves long range at low power (spreading factor concept), LoRa vs Zigbee vs Z-Wave comparison, and One real-world deployment example in India.
