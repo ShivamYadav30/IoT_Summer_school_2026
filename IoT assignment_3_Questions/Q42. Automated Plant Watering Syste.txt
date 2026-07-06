@@ -1,0 +1,13 @@
+Q42. Automated Plant Watering System
+Problem Statement
+A J&K horticulture farmer wants to automate irrigation for a small saffron farm plot. The system should read soil moisture every 30 minutes and activate a water pump only when the soil is dry. Saffron is sensitive to overwatering — the system must also prevent watering if it rained recently (use LDR to detect low light/overcast sky as a rain proxy and also leverage the use of api also). The farmer must be able to manually override via a button.
+
+
+Requirements:
+Soil moisture sensor reading with dry/wet/optimal zones
+Relay module controlling water pump (simulate with LED)
+LDR-based rain proxy logic
+Manual override button with 5-minute lockout after manual activation
+Display system status on 16x2 LCD: moisture%, mode, last watered time (millis-based)
+ESP8266 Wi-Fi logging to Google Sheets via IFTTT/ Google Scripts similar 
+

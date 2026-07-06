@@ -1,0 +1,13 @@
+Q43. Smart Door Lock with OTP
+Problem Statement
+A university hostel wants to replace physical keys with a PIN-based entry system that also generates a One-Time Password. Design a system where a student enters their 4-digit ID on a keypad, the system generates a 6-digit OTP, sends it over Bluetooth to their phone, and only grants access if they enter the OTP within 30 seconds.
+
+
+Requirements:
+4x4 keypad for ID and OTP entry
+16x2 LCD or 0.96 OLED for prompts and masked input (show for digits)
+HC-05 Bluetooth: Send OTP string to connected phone / Alternate use ESP32
+Servo motor: rotate 90° to simulate door unlock
+30-second countdown timer using millis() (non-blocking) // Don’t use delay
+Log all access attempts (success/failure) to Serial Monitor
+
