@@ -1,0 +1,12 @@
+Q44. PIR-Based Security Camera Trigger
+Problem Statement
+A small shop in Haryana, Rohtak wants a low-cost security alert system. When motion is detected after shop hours (manually configured time window), the system should sound an alarm, flash lights, and optionally send a notification. Build the motion-detection and alerting module.
+
+
+Requirements:
+PIR sensor with adjustable sensitivity (via potentiometer mapped to threshold)
+Active buzzer alarm with 3-stage escalation (warning → alarm → urgent)
+LED strip simulation (3 LEDs flashing in sequence)
+Time-window configuration via Serial command (e.g., SET_HOURS 22 06)
+Log motion events with timestamps to Serial Monitor
+ESP32 sends Telegram bot message on motion detection
