@@ -1,0 +1,13 @@
+Q41. Smart Home Air Quality Monitor
+Problem Statement
+A family in a Milan(Europe) home is concerned about indoor air quality during winter when they burn wood for heating. Design an IoT-based Air Quality Monitoring System that continuously measures CO/smoke levels (MQ-2 sensor), temperature and humidity (DHT11), and alerts residents when air quality drops below safe thresholds. The system must work without the internet when the router is down.
+
+Requirements:
+MQ-2 gas sensor integration with analog threshold comparison
+DHT11 for temperature and humidity reading
+RGB LED: Green (safe), Yellow (moderate), Red (danger)
+Buzzer alarm with 3 different tones based on severity level
+Local data logging via Serial Monitor in CSV format
+Send alert over Bluetooth to phone (+2 marks)
+Evaluation Focus: Sensor calibration logic, threshold design, alarm escalation.
+Wokwi Calibration and schematic to attached and random alert as illustration to sent to the phone (ScreenShot).
