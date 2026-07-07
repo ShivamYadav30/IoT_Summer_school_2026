@@ -1,0 +1,8 @@
+Q48. Design Challenge: IoT for Jammu Smart City
+J&K Government is planning a Smart City project for Jammu. As an IoT engineer, propose a system to monitor and manage 3 of the following (choose any 3): Street lighting, Traffic flow, Parking availability, Air quality, Water supply pressure, Waste bin fill levels. For each:
+Identify the sensor(s) needed
+Identify the microcontroller / connectivity module
+Describe the data flow: Sensor → Protocol → Cloud → Dashboard
+Estimate approximate cost per node (in INR)
+Present your answer as a structured proposal (500–700 words) uploaded as /final_project/smart_city_proposal.md in GitHub.
+Write the code for each problem separately.

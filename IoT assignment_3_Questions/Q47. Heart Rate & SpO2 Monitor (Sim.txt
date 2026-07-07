@@ -1,0 +1,12 @@
+Q47. Heart Rate & SpO2 Monitor (Simulation)
+Problem Statement
+Using a MAX30102 pulse oximeter module (or simulate with an LDR as a proxy sensor), build a health monitoring prototype that measures pulse rate and blood oxygen saturation, displays values, and alerts on abnormal readings. This is a simulation for learning sensor interfacing, not a medical device.
+
+
+Requirements:
+MAX30102 via I2C (or LDR analog simulation with smoothed readings)
+Display: LCD or Serial Monitor with readings updated every 2 seconds
+Alert: Red LED if HR < 50 or > 120 bpm, or SpO2 < 94%
+Implement a 5-reading rolling average to smooth noisy data
+Log readings to a /data/health_log.csv file reference in GitHub README
+
