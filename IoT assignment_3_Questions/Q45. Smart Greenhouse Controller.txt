@@ -1,0 +1,12 @@
+Q45. Smart Greenhouse Controller
+Problem Statement
+Floriculture farmers in Kashmir growing tulips and roses need automated greenhouse climate control. Design a multi-parameter monitoring and control system that maintains optimal growing conditions: Temperature 18–22°C, Humidity 60–70%, and sufficient light for 12 hours per day.
+
+
+Requirements:
+DHT11: Monitor temperature and humidity
+LDR: Monitor light levels with running average over 10 samples
+3 relay outputs: Heater, Ventilation Fan, Grow Light (simulate with LEDs)
+PID-like control logic (simple bang-bang with hysteresis)
+16x2 LCD: Cycle through all readings every 3 seconds
+BONUS: MQTT publish of all parameters to cloud dashboard

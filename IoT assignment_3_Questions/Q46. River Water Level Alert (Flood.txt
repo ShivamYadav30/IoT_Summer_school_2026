@@ -1,0 +1,12 @@
+Q46. River Water Level Alert (Flood Detection)
+Problem Statement
+Given the frequent flooding near the Tawi and Chenab rivers, design a low-cost IoT flood-early-warning sensor node using an HC-SR04 ultrasonic sensor to monitor water level in a model river (a glass tank). Trigger alerts at predefined levels and transmit data wirelessly.
+
+
+Requirements:
+HC-SR04 mounted above water surface; distance decreasing = water rising
+3 alert levels: NORMAL (>30cm clearance), WARNING (15–30cm), CRITICAL (<15cm)
+LED + buzzer alerts with different patterns per level
+Rolling 10-sample average to filter ultrasonic noise
+Wi-Fi/BT broadcast of alert level as a simple string message
+Web dashboard showing live level graph with Chart.js 
