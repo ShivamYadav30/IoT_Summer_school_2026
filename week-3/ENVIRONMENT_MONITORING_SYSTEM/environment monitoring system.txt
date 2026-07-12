@@ -1,0 +1,55 @@
+#include <DHT.h>
+#define DHTPIN 1
+#define DHTTYPE DHT11
+
+
+DHT dht(DHTPIN, DHTTYPE);
+
+const int redLED = 3;
+const int greenLED = 2;
+
+void setup() {
+  Serial.begin(9600);
+
+  dht.begin();
+
+  pinMode(redLED, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+
+
+  Serial.println("timestamp,temp_C,temp_F,humidity");
+}
+
+void loop() {
+
+  float tempC = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  if (isnan(tempC) || isnan(humidity)) {
+    Serial.println("Sensor Error");
+    delay(2000);
+    return;
+  }
+
+  float tempF = tempC * 9.0 / 5.0 + 32.0;
+
+  // Print CSV data
+  Serial.print(millis());
+  Serial.print(",");
+  Serial.print(tempC);
+  Serial.print(",");
+  Serial.print(tempF);
+  Serial.print(",");
+  Serial.println(humidity);
+
+  // LED Control
+  if (tempC > 35 || humidity > 80) {
+    digitalWrite(redLED, HIGH);
+    digitalWrite(greenLED, LOW);
+  } else {
+    digitalWrite(redLED, LOW);
+    digitalWrite(greenLED, HIGH);
+  }
+
+  delay(2000);
+}

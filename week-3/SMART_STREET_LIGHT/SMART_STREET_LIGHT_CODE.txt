@@ -1,0 +1,107 @@
+const int LDR_PIN = A0;     
+const int PIR_PIN = 2;       
+const int LED_PIN = 3;       
+
+
+const int LDR_THRESHOLD = 400;      
+const unsigned long MOTION_TIME = 30000; 
+const int DIM_BRIGHTNESS = 51;      
+const int FULL_BRIGHTNESS = 255;    
+
+
+enum LightState { DAYTIME, NIGHT_IDLE, NIGHT_ACTIVE };
+LightState currentState = DAYTIME;
+
+unsigned long motionStartTime = 0;
+bool motionTimerActive = false;
+
+void setup() {
+  pinMode(PIR_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+  
+  Serial.begin(9600);
+  logEvent("SYSTEM: Smart Street Light Initialized.");
+}
+
+void loop() {
+  int ldrValue = analogRead(LDR_PIN);
+  bool isDark = (ldrValue < LDR_THRESHOLD);
+  bool motionDetected = (digitalRead(PIR_PIN) == HIGH);
+  unsigned long currentMillis = millis();
+
+  
+  switch (currentState) {
+    
+    case DAYTIME:
+      
+      if (isDark) {
+        currentState = NIGHT_IDLE;
+        analogWrite(LED_PIN, DIM_BRIGHTNESS);
+        logEvent("ENVIRONMENT: Night detected. Switching to Motion Detection Mode (Dimmed to 20%).");
+      }
+      break;
+
+    case NIGHT_IDLE:
+
+      if (!isDark) {
+        transitionToDaytime();
+        break;
+      }
+      
+      
+      if (motionDetected) {
+        currentState = NIGHT_ACTIVE;
+        analogWrite(LED_PIN, FULL_BRIGHTNESS);
+        motionStartTime = currentMillis;
+        motionTimerActive = true;
+        logEvent("MOTION: Motion detected! LED set to 100% brightness.");
+      }
+      break;
+
+    case NIGHT_ACTIVE:
+      
+      if (!isDark) {
+        motionTimerActive = false;
+        transitionToDaytime();
+        break;
+      }
+
+      
+      if (motionDetected) {
+        motionStartTime = currentMillis; 
+      }
+
+    
+      if (motionTimerActive && (currentMillis - motionStartTime >= MOTION_TIME)) {
+        currentState = NIGHT_IDLE;
+        analogWrite(LED_PIN, DIM_BRIGHTNESS);
+        motionTimerActive = false;
+        logEvent("TIMEOUT: No motion for 30 seconds. Dimming LED back to 20%.");
+      }
+      break;
+  }
+
+  delay(50); 
+}
+
+
+void transitionToDaytime() {
+  currentState = DAYTIME;
+  analogWrite(LED_PIN, 0);
+  logEvent("ENVIRONMENT: Daylight detected. Turning LED completely OFF.");
+}
+
+
+void logEvent(String description) {
+  unsigned long totalSeconds = millis() / 1000;
+  unsigned long seconds = totalSeconds % 60;
+  unsigned long minutes = (totalSeconds / 60) % 60;
+  unsigned long hours = (totalSeconds / 3600) % 24;
+
+  char timeBuffer[12];
+  sprintf(timeBuffer, "[%02lu:%02lu:%02lu]", hours, minutes, seconds);
+  
+  Serial.print(timeBuffer);
+  Serial.print(" EVENT: ");
+  Serial.println(description);
+}
