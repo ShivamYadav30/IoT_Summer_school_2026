@@ -1,0 +1,90 @@
+#include "DHT.h"
+
+
+#define DHTPIN 2
+#define DHTTYPE DHT22
+#define LDRPIN A0
+#define TRIGPIN 3
+#define ECHOPIN 4
+
+
+DHT dht(DHTPIN, DHTTYPE);
+
+
+unsigned long previousMillis = 0;
+const long interval = 5000; // 
+
+void setup() {
+  Serial.begin(9600);
+  
+  // Initialize sensors
+  dht.begin();
+  pinMode(TRIGPIN, OUTPUT);
+  pinMode(ECHOPIN, INPUT);
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+
+ 
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+
+   
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+
+    
+    int ldrRaw = analogRead(LDRPIN);
+    
+   
+    int lightPercent = map(ldrRaw, 1023, 0, 0, 100); 
+    String lightDesc = getLightDescription(lightPercent);
+
+   
+    long distance = readDistance();
+
+  
+    if (isnan(temperature) || isnan(humidity)) {
+      Serial.println("Error: Failed to read from DHT sensor!");
+      return;
+    }
+
+
+    Serial.println("=== SENSOR LOG ===");
+    Serial.print("Time      : "); Serial.print(currentMillis); Serial.println(" ms");
+    
+    Serial.print("Temp      : "); Serial.print(temperature, 1); Serial.print(" C | Humidity: "); 
+    Serial.print((int)humidity); Serial.println("%");
+    
+    Serial.print("Light     : "); Serial.print(lightPercent); Serial.print("% ("); 
+    Serial.print(lightDesc); Serial.println(")");
+    
+    Serial.print("Distance  : "); Serial.print(distance); Serial.println(" cm");
+    Serial.println("==================");
+  }
+}
+
+
+long readDistance() {
+  digitalWrite(TRIGPIN, LOW);
+  delayMicroseconds(2);
+  
+  digitalWrite(TRIGPIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGPIN, LOW);
+  
+  long duration = pulseIn(ECHOPIN, HIGH);
+  
+  
+  long distanceCm = duration * 0.0343 / 2;
+  
+  return distanceCm;
+}
+
+
+String getLightDescription(int percentage) {
+  if (percentage < 30)  return "Dark";
+  if (percentage < 70)  return "Ambient";
+  return "Bright";
+}
