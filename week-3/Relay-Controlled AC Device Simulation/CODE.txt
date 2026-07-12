@@ -1,0 +1,112 @@
+#include "DHT.h"
+
+
+#define DHTPIN 22    // DHT11 Data Pin
+#define RELAY_PIN 23    // Relay Control Pin
+#define BUTTON_PIN 19      // Manual Override Button Pin
+
+
+#define DHTTYPE DHT22
+DHT dht(DHTPIN, DHTTYPE);
+
+
+const float TEMP_HIGH = 32.0; // Turn AC ON
+const float TEMP_LOW = 28.0;  // Turn AC OFF
+
+
+bool relayState = false;       // current state of the relay (false = OFF, true = ON)
+bool manualOverride = false;   // tracks if manual override is active
+bool lastButtonState = HIGH;   // tracking button edge (INPUT_PULLUP defaults HIGH)
+
+
+unsigned long lastDebounceTime = 0;
+const unsigned long debounceDelay = 50; 
+
+
+unsigned long lastSensorReadTime = 0;
+const unsigned long sensorReadInterval = 2000; // Read DHT11 every 2 seconds
+
+void logStateChange(float currentTemp, String cause) {
+  Serial.println("----------------------------------------");
+  Serial.print("[LOG] Relay State Changed! New State: ");
+  Serial.println(relayState ? "ON (AC Running)" : "OFF (AC Stopped)");
+  Serial.print("[LOG] Temperature: ");
+  Serial.print(currentTemp);
+  Serial.println(" °C");
+  Serial.print("[LOG] Trigger Cause: ");
+  Serial.println(cause);
+  Serial.println("----------------------------------------");
+}
+
+void setup() {
+  Serial.begin(115200);
+  
+  
+  pinMode(RELAY_PIN, OUTPUT);
+  // Active LOW relay module convention used here (common for Arduino/ESP modules).
+  // If your relay is Active HIGH, change this to LOW initially.
+  digitalWrite(RELAY_PIN, HIGH); 
+  
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  
+  dht.begin();
+  Serial.println("Relay-Controlled AC Simulation Started.");
+  Serial.println("System monitoring temperature...");
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+  
+  
+  int reading = digitalRead(BUTTON_PIN);
+  
+  if (reading != lastButtonState) {
+    lastDebounceTime = currentMillis;
+  }
+  
+  if ((currentMillis - lastDebounceTime) > debounceDelay) {
+   
+    if (reading == LOW && !manualOverride) {
+      manualOverride = true;
+      relayState = !relayState; // Toggle current state
+      
+           digitalWrite(RELAY_PIN, relayState ? LOW : HIGH); 
+      
+          float t = dht.readTemperature();
+      logStateChange(isnan(t) ? 0.0 : t, "Manual Button Override Pressed");
+    }
+   
+    if (reading == HIGH) {
+      manualOverride = false;
+    }
+  }
+  lastButtonState = reading;
+
+   if (currentMillis - lastSensorReadTime >= sensorReadInterval) {
+    lastSensorReadTime = currentMillis;
+    
+    float t = dht.readTemperature();
+    
+
+    if (isnan(t)) {
+      Serial.println("[ERROR] Failed to read from DHT sensor!");
+      return;
+    }
+    
+       Serial.print("Current Temp: ");
+    Serial.print(t);
+    Serial.print(" °C | Relay Status: ");
+    Serial.println(relayState ? "ON" : "OFF");
+  
+    if (t > TEMP_HIGH && !relayState) {
+      relayState = true;
+      digitalWrite(RELAY_PIN, LOW); // Turn Relay ON (Active LOW module)
+      logStateChange(t, "Temperature exceeded high threshold (32°C)");
+    } 
+    else if (t < TEMP_LOW && relayState) {
+      relayState = false;
+      digitalWrite(RELAY_PIN, HIGH); // Turn Relay OFF (Active LOW module)
+      logStateChange(t, "Temperature dropped below low threshold (28°C)");
+    }
+  }
+}

@@ -1,0 +1,40 @@
+Relay-Controlled AC Simulation Started.
+System monitoring temperature...
+----------------------------------------
+[LOG] Relay State Changed! New State: ON (AC Running)
+[LOG] Temperature: 39.40 °C
+[LOG] Trigger Cause: Manual Button Override Pressed
+----------------------------------------
+Current Temp: 39.40 °C | Relay Status: ON
+Current Temp: 21.60 °C | Relay Status: ON
+----------------------------------------
+[LOG] Relay State Changed! New State: OFF (AC Stopped)
+[LOG] Temperature: 21.60 °C
+[LOG] Trigger Cause: Temperature dropped below low threshold (28°C)
+----------------------------------------
+Current Temp: -3.90 °C | Relay Status: OFF
+Current Temp: 32.70 °C | Relay Status: OFF
+----------------------------------------
+[LOG] Relay State Changed! New State: ON (AC Running)
+[LOG] Temperature: 32.70 °C
+[LOG] Trigger Cause: Temperature exceeded high threshold (32°C)
+----------------------------------------
+Current Temp: 44.50 °C | Relay Status: ON
+Current Temp: 44.50 °C | Relay Status: ON
+Current Temp: 34.30 °C | Relay Status: ON
+Current Temp: 8.90 °C | Relay Status: ON
+----------------------------------------
+[LOG] Relay State Changed! New State: OFF (AC Stopped)
+[LOG] Temperature: 8.90 °C
+[LOG] Trigger Cause: Temperature dropped below low threshold (28°C)
+----------------------------------------
+Current Temp: 8.90 °C | Relay Status: OFF
+Current Temp: 8.90 °C | Relay Status: OFF
+Current Temp: 8.90 °C | Relay Status: OFF
+Current Temp: 8.90 °C | Relay Status: OFF
+Current Temp: 8.90 °C | Relay Status: OFF
+Current Temp: 8.90 °C | Relay Status: OFF
+Current Temp: 8.90 °C | Relay Status: OFF
+Current Temp: 8.90 °C | Relay Status: OFF
+Current Temp: 8.90 °C | Relay Status: OFF
+Current Temp: 8.90 °C | Relay Status: OFF

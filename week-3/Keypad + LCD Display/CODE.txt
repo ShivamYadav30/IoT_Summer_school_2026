@@ -1,0 +1,145 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <Keypad.h>
+
+
+const String CORRECT_PIN = "1234"; 
+const int MAX_ATTEMPTS = 3;
+const unsigned long LOCKOUT_TIME = 10000; 
+
+
+const int GREEN_LED = 10;
+const int RED_LED = 11;
+const int BUZZER = 12;
+
+
+const byte ROWS = 4;
+const byte COLS = 4;
+char keys[ROWS][COLS] = {
+  {'1','2','3','A'},
+  {'4','5','6','B'},
+  {'7','8','9','C'},
+  {'*','0','#','D'}
+};
+byte rowPins[ROWS] = {9, 8, 7, 6};   
+byte colPins[COLS] = {5, 4, 3, 2};   
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+
+// Change 0x27 to 0x3F if your LCD doesn't display anything
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
+
+String inputPin = "";
+int wrongAttempts = 0;
+
+void setup() {
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(RED_LED, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
+  
+
+  digitalWrite(GREEN_LED, LOW);
+  digitalWrite(RED_LED, LOW);
+  
+  lcd.init();
+  lcd.backlight();
+  resetSystem();
+}
+
+void loop() {
+  char key = keypad.getKey();
+  
+  if (key) {
+   
+    tone(BUZZER, 2000, 50); 
+    
+    // Clear/Reset if '*' is pressed
+    if (key == '*') {
+      resetSystem();
+    } 
+       else if (key == '#') {
+      if (inputPin.length() > 0) {
+        checkPin();
+      }
+    } 
+   
+    else if (inputPin.length() < 4 && (key >= '0' && key <= '9')) {
+      inputPin += key;
+      lcd.setCursor(inputPin.length() - 1, 1);
+      lcd.print('*'); // Mask the PIN entry with asterisks
+      
+      
+      if (inputPin.length() == 4) {
+        delay(250); // Small buffer so the user sees the last '*'
+        checkPin();
+      }
+    }
+  }
+}
+
+void checkPin() {
+  lcd.clear();
+  
+  if (inputPin == CORRECT_PIN) {
+   
+    lcd.setCursor(1, 0);
+    lcd.print("ACCESS GRANTED");
+    digitalWrite(GREEN_LED, HIGH);
+    
+  
+    tone(BUZZER, 1500, 500); 
+    delay(3000);
+    
+    digitalWrite(GREEN_LED, LOW);
+    wrongAttempts = 0; // Reset attempts on successful entry
+    resetSystem();
+  } 
+  else {
+   
+    wrongAttempts++;
+    lcd.setCursor(1, 0);
+    lcd.print("ACCESS DENIED!");
+    digitalWrite(RED_LED, HIGH);
+    
+    
+    tone(BUZZER, 400, 600); 
+    delay(1500);
+    digitalWrite(RED_LED, LOW);
+    
+    if (wrongAttempts >= MAX_ATTEMPTS) {
+      handleLockout();
+    } else {
+      resetSystem();
+    }
+  }
+}
+
+void handleLockout() {
+  digitalWrite(RED_LED, HIGH);
+  
+    for (int i = LOCKOUT_TIME / 1000; i > 0; i--) {
+    lcd.clear();
+    lcd.setCursor(2, 0);
+    lcd.print("SYSTEM LOCKED");
+    lcd.setCursor(4, 1);
+    lcd.print("Wait: ");
+    lcd.print(i);
+    lcd.print("s");
+    
+    tone(BUZZER, 600, 100); 
+    delay(1000);
+  }
+  
+  digitalWrite(RED_LED, LOW);
+  wrongAttempts = 0;
+  resetSystem();
+}
+
+void resetSystem() {
+  inputPin = "";
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("ENTER PIN:");
+  lcd.setCursor(0, 1);
+    lcd.print("    "); 
+}
