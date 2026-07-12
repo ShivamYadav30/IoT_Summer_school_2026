@@ -1,0 +1,100 @@
+const int POT_PIN = A0;     
+const int DIR_BUTTON = 2;   
+const int START_BUTTON = 3;  
+
+
+const int ENA = 9;   // Connects to L293D Pin 1 (PWM)
+const int IN1 = 7;   // Connects to L293D Pin 2
+const int IN2 = 8;   // Connects to L293D Pin 7
+
+
+bool isRunning = false;
+bool isForward = true;
+int motorSpeedPWM = 0;
+int motorSpeedPercent = 0;
+
+bool lastDirButtonState = HIGH;
+bool lastStartButtonState = HIGH;
+unsigned long lastDebounceTime = 0;
+const unsigned long debounceDelay = 50; 
+
+
+unsigned long lastPrintTime = 0;
+const unsigned long printInterval = 500; 
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(ENA, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+
+ 
+  pinMode(DIR_BUTTON, INPUT_PULLUP);
+  pinMode(START_BUTTON, INPUT_PULLUP);
+
+  stopMotor();
+}
+
+void loop() {
+  
+  int potValue = analogRead(POT_PIN);
+  motorSpeedPWM = map(potValue, 0, 1023, 0, 255);
+  motorSpeedPercent = map(motorSpeedPWM, 0, 255, 0, 100);
+
+
+  bool currentDirButton = digitalRead(DIR_BUTTON);
+  bool currentStartButton = digitalRead(START_BUTTON);
+
+  
+  if (currentStartButton == LOW && lastStartButtonState == HIGH && (millis() - lastDebounceTime > debounceDelay)) {
+    isRunning = !isRunning;
+    lastDebounceTime = millis();
+  }
+  lastStartButtonState = currentStartButton;
+
+  
+  if (currentDirButton == LOW && lastDirButtonState == HIGH && (millis() - lastDebounceTime > debounceDelay)) {
+    isForward = !isForward;
+    lastDebounceTime = millis();
+  }
+  lastDirButtonState = currentDirButton;
+
+
+  if (isRunning) {
+    analogWrite(ENA, motorSpeedPWM);
+    if (isForward) {
+      digitalWrite(IN1, HIGH);
+      digitalWrite(IN2, LOW);
+    } else {
+      digitalWrite(IN1, LOW);
+      digitalWrite(IN2, HIGH);
+    }
+  } else {
+    stopMotor();
+  }
+
+
+  if (millis() - lastPrintTime >= printInterval) {
+    printStatus();
+    lastPrintTime = millis();
+  }
+}
+
+void stopMotor() {
+  analogWrite(ENA, 0);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+}
+
+void printStatus() {
+  Serial.print("State: ");
+  Serial.print(isRunning ? "RUNNING" : "STOPPED");
+  
+  Serial.print(" | Direction: ");
+  Serial.print(isForward ? "FORWARD" : "REVERSE");
+  
+  Serial.print(" | Speed: ");
+  Serial.print(motorSpeedPercent);
+  Serial.println("%");
+}
